@@ -14,7 +14,9 @@ Shedding Snake is a contribution to [js1024](https://js1024.fun/), an annual jav
 
 Eat apples to grow and shed your skin. Avoid colliding with yourself or skin waste or you'll die. Try to beat the hiscore! Can you reach 25?
 Controls: WASD or Arrow keys.
+
 ![code base](./gameplay300.gif)
+
 ## Features that ate bytes
 
 1024 is actually more than enough for a snake game. The extra bytes went into: The snake shed it skin each time it grows. Rotate snake face to current direction. Title screen. Skin pattern. Emojis :-). Score and hiscore.
