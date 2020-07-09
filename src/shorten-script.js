@@ -25,6 +25,7 @@ fs.readFile("./script.js", "utf8", function read(err, content) {
     ["tail"],
     ["drawText"],
     ["setFont"],
+    ["tick"],
     ["update"],
     ["Q = Q =", "Q ="],
     ["Q = Q =", "Q ="],

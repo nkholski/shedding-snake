@@ -20,7 +20,7 @@ const APPLE = 3;
 // I initalizes it as a global here and as a number to save space and because Javascript doesn't care 🤷
 area = a.width = a.height = 9e2;
 size = dimx = dimy = 30;
-screen = u = l = d = r = state = apos = score = direction = apple = player = skin = hiscore = 0;
+tick = screen = u = l = d = r = state = apos = score = direction = apple = player = skin = hiscore = 0;
 
 // Get context and center all text
 c = a.getContext("2d");
@@ -29,21 +29,23 @@ c.textAlign = "center";
 // This is a sligtly altered version of XEMs input handler for arrow keys and WASD. https://xem.github.io/articles/jsgamesinputs.html
 onkeydown = (e) => {
   top["lld*rlurdu"[(e.which % 32) % 17]] = e.type[5];
-  direction = u ? 1 : r ? 2 : d ? 3 : l ? 4 : direction;
+  // The direction starts with 2 so that I can rotate the snake head with `c.rotate(direction * 1.6)` instead
+  // of `c.rotate(direction * 1.6 + 1.6)` in the drawEmoji-function
+  direction = u ? 2 : r ? 3 : d ? 4 : l ? 5 : direction;
   u = l = d = r = 0;
 };
 
 // screen[apos] might contain the snake or skin which are numbers above 0 and thus truthy,
-// otherwise 0 or undefined which is both falsy.
+// otherwise 0 or undefined which is both falsy. x|0 is a bitwise operation equivalent to Math.floor(x)
 const addApple = () => {
   do {
-    apos = Math.floor(dimx * dimy * Math.random());
+    apos = dimx * dimy * Math.random()|0;
   } while (screen[apos]);
   screen[apos] = APPLE;
 };
 
 // c.fillStyle called multiple times --> a shorter function reduces code
-const drawColor = (d) => (c.fillStyle = d);
+const drawColor = (d="#000") => (c.fillStyle = d);
 
 // We just want centered x most of the times so that can have a default value.
 // The value is multiplied with 9 istead of 10 to save a letter. Center is (900 / (2 * 9)) = 50
@@ -54,7 +56,7 @@ const drawText = (t, y, x = 50) => c.fillText(t, x * 9, y * 9);
 // I add it together and use ternary instead of "if" to save space.
 const drawEmoji = (a, b) =>
   c.translate(15, 15) +
-  (b ? c.rotate(direction * 1.6 + 1.6) : 0) +
+  (b ? c.rotate(direction * 1.6) : 0) +
   drawText(a, .5, 0);
 
 // To set font we need a font size and a font. "a" makes the statement valid but
@@ -70,11 +72,11 @@ setInterval(() => {
     // Move head in the current direction
     head =
       player[0] +
-      (direction == 1
+      (direction == 2
         ? -dimx
-        : direction == 2
-        ? 1
         : direction == 3
+        ? 1
+        : direction == 4
         ? dimx
         : -1);
     // Fix head position when outside screen
@@ -92,8 +94,7 @@ setInterval(() => {
       // Add skin to shed, and mark current body as skin
       skin = player.length;
       screen = screen.map((c) => (c == PLAYER ? 1 : c));
-      score++;
-      hiscore = score > hiscore ? score : hiscore;
+      hiscore = ++score > hiscore ? score : hiscore;
       // Make the snake longer
       player.push(tail);
     }
@@ -119,8 +120,11 @@ setInterval(() => {
         drawEmoji("🐸", 1);
         continue;
       }
-      // Draw color from the correct index (0 if undefined) and black if it's an apple
-      drawColor(["#000", "#DDD", "#693", "#000"][screen[i] || 0]);
+      // Draw color from the correct index and black if it's an apple
+      // The color array has two undefined indicies witch will make drawColor
+      // use default parameter value ("#000"), screen[i] might be undefined too
+      // with the same result.
+      drawColor([, "#DDD", "#693",][screen[i]]);
       c.fillRect(0, 0, size, size);
       // Add an X on the back of the snake and add an apple
       screen[i] == PLAYER ? drawEmoji("✖️") : 0;
@@ -129,12 +133,15 @@ setInterval(() => {
     // Don't know rotation/translation of context or current color. Restore it.
     c.restore();
     drawColor("#099");
-    drawText(`Pts: ${score} 🐍 Top: ${hiscore}`, 3);
+    drawText(`Score:${score} 🐍 Top:${hiscore}`, 3);
   } else {
     // TITLE SCREEN
     setFont(60);
+    drawColor("#099");
     drawText("🐍Shedding Snake", size);
+    ++tick%2?drawColor():0;
     drawText("Press S", 42);
+
     // Resent screen, add apple, place player each loop. If a key is pressed (picked up as direction)
     // set the state to 1 (the game state is truthy). Yes any directional key would work, but "S" is
     // enough as an instruction :-).
