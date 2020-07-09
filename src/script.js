@@ -55,11 +55,11 @@ const drawText = (t, y, x = 50) => c.fillText(t, x * 9, y * 9);
 const drawEmoji = (a, b) =>
   c.translate(15, 15) +
   (b ? c.rotate(direction * 1.6 + 1.6) : 0) +
-  drawText(a, 0.5, 0);
+  drawText(a, .5, 0);
 
 // To set font we need a font size and a font. "a" makes the statement valid but
 // fall back to default font since "a" is missing.
-const setFont = (a) => (c.font = `${a}px a`);
+const setFont = (a) => (c.font = a+"px a");
 
 setInterval(() => {
   // state is either 1 (truthy) or 0 (falsy), to save space this is used instead of switch/case or if/else if
@@ -83,7 +83,7 @@ setInterval(() => {
     tail = player.pop();
     player = [head, ...player];
     // if it's shedding, reduce and leave part of the skin, otherwise add blank space
-    screen[tail] = skin-- > 0 ? 1 : 0;
+    screen[tail] = --skin < 0 ? 0 : 1;
 
     if (screen[head] === APPLE) {
       // If there is an apple on the head square, spawn new apple and reattach the old tail == the snake has grown
@@ -129,12 +129,12 @@ setInterval(() => {
     // Don't know rotation/translation of context or current color. Restore it.
     c.restore();
     drawColor("#099");
-    drawText(`🐍Score: ${score}   Top: ${hiscore}`, 3);
+    drawText(`Pts: ${score} 🐍 Top: ${hiscore}`, 3);
   } else {
     // TITLE SCREEN
     setFont(60);
-    drawText("🐍Shedding Snake", 25); // Wasted some bytes just because I could :-P
-    drawText("-Press S-", 42);
+    drawText("🐍Shedding Snake", size);
+    drawText("Press S", 42);
     // Resent screen, add apple, place player each loop. If a key is pressed (picked up as direction)
     // set the state to 1 (the game state is truthy). Yes any directional key would work, but "S" is
     // enough as an instruction :-).
