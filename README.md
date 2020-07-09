@@ -18,7 +18,7 @@ Controls: WASD or Arrow keys.
 
 ## Features that ate bytes
 
-1024 is actually more than enough for a snake game. The extra bytes went into: The snake shed it skin each time it grows. Rotate snake face to current direction. Title screen. Skin pattern and  emojis :-). Score and hiscore.
+1024 is actually more than enough for a snake game. The extra bytes went into: The snake shed it skin each time it grows. Rotate snake face to current direction. Title screen. Skin pattern and  emojis :-). Score and hiscore. I fought one last hour to get a flashing "Press S" into the game.
 
 ## How to run
 
