@@ -39,13 +39,13 @@ onkeydown = (e) => {
 // otherwise 0 or undefined which is both falsy. x|0 is a bitwise operation equivalent to Math.floor(x)
 const addApple = () => {
   do {
-    apos = dimx * dimy * Math.random()|0;
+    apos = (dimx * dimy * Math.random()) | 0;
   } while (screen[apos]);
   screen[apos] = APPLE;
 };
 
 // c.fillStyle called multiple times --> a shorter function reduces code
-const drawColor = (d="#000") => (c.fillStyle = d);
+const drawColor = (d = "#000") => (c.fillStyle = d);
 
 // We just want centered x most of the times so that can have a default value.
 // The value is multiplied with 9 istead of 10 to save a letter. Center is (900 / (2 * 9)) = 50
@@ -57,11 +57,11 @@ const drawText = (t, y, x = 50) => c.fillText(t, x * 9, y * 9);
 const drawEmoji = (a, b) =>
   c.translate(15, 15) +
   (b ? c.rotate(direction * 1.6) : 0) +
-  drawText(a, .5, 0);
+  drawText(a, 0.5, 0);
 
 // To set font we need a font size and a font. "a" makes the statement valid but
 // fall back to default font since "a" is missing.
-const setFont = (a) => (c.font = a+"px a");
+const setFont = (a) => (c.font = a + "px a");
 
 setInterval(() => {
   // state is either 1 (truthy) or 0 (falsy), to save space this is used instead of switch/case or if/else if
@@ -124,7 +124,7 @@ setInterval(() => {
       // The color array has two undefined indicies witch will make drawColor
       // use default parameter value ("#000"), screen[i] might be undefined too
       // with the same result.
-      drawColor([, "#DDD", "#693",][screen[i]]);
+      drawColor([, "#DDD", "#693"][screen[i]]);
       c.fillRect(0, 0, size, size);
       // Add an X on the back of the snake and add an apple
       screen[i] == PLAYER ? drawEmoji("✖️") : 0;
@@ -139,7 +139,7 @@ setInterval(() => {
     setFont(60);
     drawColor("#099");
     drawText("🐍Shedding Snake", size);
-    ++tick%2?drawColor():0;
+    ++tick % 2 ? drawColor() : 0;
     drawText("Press S", 42);
 
     // Resent screen, add apple, place player each loop. If a key is pressed (picked up as direction)
