@@ -49,5 +49,10 @@ fs.readFile("./script.js", "utf8", function read(err, content) {
         : replacements.charAt(replacementIndex++);
     content = content.replace(regexp, replacement);
   });
+
+  // Shorten method calls f("x") to f`x` and ()=> to _=>
+  content = content.replace(/([a-zA-Z])\(\"(.*?)\"\)/gi,"$1`$2`");
+  content = content.replace(/\(\)\s?\=\>/gi,"_=>");
+
   fs.writeFile("./shortened-script.js", content, () => {});
 });
