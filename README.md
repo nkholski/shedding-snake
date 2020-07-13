@@ -1,6 +1,12 @@
 # Shedding Snake js1024
 
-Shedding Snake is a contribution to [js1024](https://js1024.fun/), an annual javascript golfing competition with a max size of 1kb (1024 bytes), no shim category. The minfied build is exactly 1024b of which 50 bytes is html and 974 bytes js.
+Shedding Snake is a contribution to [js1024](https://js1024.fun/), an annual javascript golfing competition with a max size of 1kb (1024 bytes), no shim category. 
+
+The minfied build is exactly 1024 bytes:
+* 51 bytes HTML/CSS
+* 32 bytes text
+* 28 bytes of emojis (7 emojis requiring 4 bytes each)
+* 913 bytes javascript (not counting the 32+28 bytes above)
 
 ## [Play the game at JS1024.fun](https://js1024.fun/demos/2020#24)
 
