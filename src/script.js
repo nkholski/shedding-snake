@@ -49,15 +49,15 @@ const drawColor = (d="#000") => (c.fillStyle = d);
 
 // We just want centered x most of the times so that can have a default value.
 // The value is multiplied with 9 istead of 10 to save a letter. Center is (900 / (2 * 9)) = 50
-const drawText = (t, y, x = 50) => c.fillText(t, x * 9, y * 9);
+const drawText = (t, y=3, x = 50) => c.fillText(t, x * 9, y * 9);
 
 // The emoji is printed with an offset from current translation for a square in the draw loop.
 // Also b rotates that context so that the head can face correct direction.
-// I add it together and use ternary instead of "if" to save space.
 // 90 degrees == Pi/2 radians which is rounded to a rough 1.6
-const drawEmoji = (a, b) =>
-  c.translate(15, 15) +
-  (b ? c.rotate(direction * 1.6) : 0) +
+// I added the parts to save one byte skipping curly brackets.
+const drawEmoji = (a, b=0) =>
+  c.translate(15, 15)+
+  c.rotate(direction * 1.6 * b)+
   drawText(a, .5, 0);
 
 // To set font we need a font size and a font. "a" makes the statement valid but
@@ -109,32 +109,30 @@ setInterval(() => {
      
     // Loop through and draw screen
     for (i = 0; i < dimx * dimy; i++) {
-      // I start with restoring and saving the default context state
-      c.restore();
       c.save();
       setFont(25);
       // Get the x position
       x = i % dimx;
-      c.translate(x * size, (size * (i - x)) / dimx);
+      c.translate(x * size, i - x);
       // If player head has the current coordinate, draw a frog head (sorry)
-      if (player[0] == i) {
+      $=player[0] == i;
+      if ($) {
         drawEmoji("🐸", 1);
-        continue;
       }
       // Draw color from the correct index and black if it's an apple
       // The color array has two undefined indicies witch will make drawColor
       // use default parameter value ("#000"), screen[i] might be undefined too
       // with the same result.
-      drawColor([, "#DDD", "#693",][screen[i]]);
-      c.fillRect(0, 0, size, size);
+      drawColor([, "#DDD", "#693"][screen[i]]);
+      if(!$){c.fillRect(0, 0, size, size);
       // Add an X on the back of the snake and add an apple
       screen[i] == PLAYER ? drawEmoji("✖️") : 0;
-      screen[i] == APPLE ? drawEmoji("🍎") : 0;
+      screen[i] == APPLE ? drawEmoji(i%2?"🍎":"🍒") : 0;
+      }
+      c.restore();
     }
-    // Don't know rotation/translation of context or current color. Restore it.
-    c.restore();
     drawColor("#099");
-    drawText(`Score:${score} 🐍 Top:${hiscore}`, 3);
+    drawText(`🕹️Score:${score} 🐍 Top:${hiscore}⭐`);
   } else {
     // TITLE SCREEN
     setFont(60);
