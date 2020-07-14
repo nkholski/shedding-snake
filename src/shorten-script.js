@@ -27,6 +27,7 @@ fs.readFile("./script.js", "utf8", function read(err, content) {
     ["setFont"],
     ["tick"],
     ["update"],
+    ["rotationInRadians"],
     ["Q = Q =", "Q ="],
     ["Q = Q =", "Q ="],
     ["===", "=="],

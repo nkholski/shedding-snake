@@ -55,9 +55,9 @@ const drawText = (t, y=3, x = 50) => c.fillText(t, x * 9, y * 9);
 // Also b rotates that context so that the head can face correct direction.
 // 90 degrees == Pi/2 radians which is rounded to a rough 1.6
 // I added the parts to save one byte skipping curly brackets.
-const drawEmoji = (a, b=0) =>
+const drawEmoji = (a, rotationInRadians=0) =>
   c.translate(15, 15)+
-  c.rotate(direction * 1.6 * b)+
+  c.rotate(direction * rotationInRadians)+
   drawText(a, .5, 0);
 
 // To set font we need a font size and a font. "a" makes the statement valid but
@@ -117,7 +117,7 @@ setInterval(() => {
       // If player head has the current coordinate, draw a frog head (sorry)
       $=player[0] == i;
       if ($) {
-        drawEmoji("🐸", 1);
+        drawEmoji("🐸", 1.6);
       }
       // Draw color from the correct index and black if it's an apple
       // The color array has two undefined indicies witch will make drawColor
@@ -132,7 +132,7 @@ setInterval(() => {
       c.restore();
     }
     drawColor("#099");
-    drawText(`🕹️Score:${score} 🐍 Top:${hiscore}⭐`);
+    drawText(`🕹️Score: ${score} 🐍 Top: ${hiscore}⭐`);
   } else {
     // TITLE SCREEN
     setFont(60);
